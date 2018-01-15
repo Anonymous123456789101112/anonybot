@@ -1,2 +1,0 @@
-# anonybot
-anonybot
