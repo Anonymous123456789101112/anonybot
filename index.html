@@ -83,28 +83,12 @@
       var msgJson //initialise variable
 	  var name = "Anonybot"
 	  var iconurl = "https://mariusvanwijk.nl/anonybot/anony.jpg"
-      if(document.getElementById('author_icon').value || document.getElementById('author_name').value || document.getElementById('embed_title').value || document.getElementById('embed_content').value){ //if any of these is present
-        msgJson = {
-          "username": name,//document.getElementById('name').value, //bot name
-          "icon_url": iconurl,//document.getElementById('avatar').value, //bot image
-          "text": document.getElementById('content').value, //text to send if provided
-          "attachments":[{
-            "author_icon": document.getElementById('author_icon').value, //original author image
-            "author_name": document.getElementById('author_name').value, //original author name
-            "color": document.getElementById('color').value, //sidebar color
-            "fields": [{
-              "title": document.getElementById('embed_title').value, //title (the bold part underneeth author name)
-              "value": document.getElementById('embed_content').value, //the text the original author wrote
-            }]
-          }]
-        }
-      }
-      else{ // none where provided
+       // none where provided
         msgJson = {
           "username": name,//document.getElementById('name').value, // bot name
           "icon_url": iconurl,//document.getElementById('avatar').value, // bot image
           "text": document.getElementById('content').value // text to send if provided
-        }
+        
       }
 
       post(hookurl, msgJson); // post the message
