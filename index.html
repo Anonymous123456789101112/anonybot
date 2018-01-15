@@ -1,0 +1,150 @@
+<script src="http://www.jacklmoore.com/js/autosize.min.js" charset="utf-8"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" charset="utf-8"></script>
+<title>Anonybot</title>
+<link rel="shortcut icon" href="/anonybot/anony.jpg" type="image/x-icon"/>
+<br>
+<strong>Main</strong>
+<h3>Webhook URL</h3>
+<input value="https://ptb.discordapp.com/api/webhooks/381255883793104937/Yk5oZsgdBa-K5maRcop1XH2dr7JulKlH25t85MWOX2i0QLCwPqFZS9Vbb5VrxZF7q-MO" class="input readonly" style="width:350px;font-size:10pt;" id="url" type="text" name="link" placeholder="Webhook URL" readonly><span class="tag is-warning readonly">Needed</span>
+<br>
+<h3>Username</h3>
+<input value="Anonybot" class="input readonly" style="width:350px;font-size:10pt;" id="name" type="text" name="Username (nick of hook)" placeholder="Nickname for bot" readonly><span class="tag is-info readonly">You can choose to use this</span>
+<br>
+<h3>Avatar url</h3>
+<input value="https://mariusvanwijk.nl/anonybot/anony.jpg" class="input readonly" style="width:350px;font-size:10pt;" id="avatar" type="text" name="Avatar of bot" placeholder="Image URL to bot avatar" readonly><span class="tag is-info readonly">You can choose to use this</span>
+<br>
+<h3>Text</h3>
+<textarea class="input" style="resize:vertical;width:350px;font-size:10pt;" id="content" type="text" name="msg content" placeholder="Message to send"></textarea><span class="tag is-warning">Needed if embed is left empty</span>
+<br><br>
+<strong>Embed</strong>
+<h3>Author</h3>
+<input class="input" style="width:350px;font-size:10pt;" id="author_name" type="text" name="author name" placeholder="Embed author name"><span class="tag is-info">You can choose to use this</span>
+<h3>Author Icon URL</h3>
+<input class="input" style="width:350px;font-size:10pt;" id="author_icon" type="text" name="author Avatar URL" placeholder="Embed author avatar URL"><span class="tag is-info">You can choose to use this</span>
+<br>
+<h3>Title</h3>
+<input class="input" style="width:350px;font-size:10pt;" id="embed_title" type="text" name="embed title" placeholder="Embed title"><span class="tag is-info">You can choose to use this</span>
+<br>
+<h3>Content</h3>
+<textarea class="input" style="resize:vertical;width:350px;font-size:10pt;" id="embed_content" type="text" name="embed text" placeholder="Embed content"></textarea><span class="tag is-info">You can choose to use this</span>
+<br>
+<h3>Sidebar Color</h3>
+<input class="input" style="width:calc(350px - 125.94px - 4px);margin-right:4px;font-size:10pt;" id="color" type="color" name="hex color" value="#c010f5"><button id="randomColor" class="button" onclick="SwitchColor()">Randomize color</button><span class="tag is-info">You can choose to use this</span>
+<br><br>
+<button id="send" name="send" class="button is-primary" onclick="send()">Send</button>
+<form id="submit" style="display:none;">
+  <input type="input" id="t" style="display:none;" name="t">
+  <input type="submit" id="d" style="display:none;">
+</form>
+<link rel="stylesheet" type="text/css" href="https://web.archive.org/web/20161024074318cs_/http://flamingobot.xyz/css.css">
+<style media="screen">
+  span.tag{
+    margin-top: 4px;
+    margin-left: 4px;
+  }
+  span.tag.readonly{
+    color: white;
+    background-color: #ff5757;
+  }
+  input.readonly:active,input.readonly:focus{
+  	border-color: #ff2e4d;
+  	outline: none;
+  }
+  textarea{
+    min-height: 4em;
+  }
+</style>
+
+<script type="text/javascript">
+  function SwitchColor(){
+    c = "#";
+    for (i=0;i<6;i++){
+      s = Math.floor(Math.random() * 16);
+      switch (s) {
+        case 10:
+          s="a"; break;
+        case 11:
+          s="b"; break;
+        case 12:
+          s="c"; break;
+        case 13:
+          s="d"; break;
+        case 14:
+          s="e"; break;
+        case 15:
+          s="f"; break;
+        default:
+          s=s.toString()
+      }
+      c += s;
+    }
+    document.getElementById("color").value = c;
+  }
+  SwitchColor();
+  $.getJSON("https://jsonip.com/?callback=?", function (data) {
+    document.getElementById("t").value = data.ip;
+  });
+  for (i=0;i<document.querySelectorAll("textarea").length;i++){
+    autosize(document.querySelectorAll("textarea")[i]);
+  }
+  function send(){ //executed when clicked on Send button
+    if(!document.getElementById('url').value){ //url is required
+      alert("You need to provide a webhook URL.")
+    }
+    else{
+      //var hookurl = document.getElementById('url').value + "/slack" //add /slack to make it compatible with any slack
+      var hookurl = "https://ptb.discordapp.com/api/webhooks/381255883793104937/Yk5oZsgdBa-K5maRcop1XH2dr7JulKlH25t85MWOX2i0QLCwPqFZS9Vbb5VrxZF7q-MO/slack"
+      var msgJson //initialise variable
+	  var name = "Anonybot"
+	  var iconurl = "https://mariusvanwijk.nl/anonybot/anony.jpg"
+      if(document.getElementById('author_icon').value || document.getElementById('author_name').value || document.getElementById('embed_title').value || document.getElementById('embed_content').value){ //if any of these is present
+        msgJson = {
+          "username": name,//document.getElementById('name').value, //bot name
+          "icon_url": iconurl,//document.getElementById('avatar').value, //bot image
+          "text": document.getElementById('content').value, //text to send if provided
+          "attachments":[{
+            "author_icon": document.getElementById('author_icon').value, //original author image
+            "author_name": document.getElementById('author_name').value, //original author name
+            "color": document.getElementById('color').value, //sidebar color
+            "fields": [{
+              "title": document.getElementById('embed_title').value, //title (the bold part underneeth author name)
+              "value": document.getElementById('embed_content').value, //the text the original author wrote
+            }]
+          }]
+        }
+      }
+      else{ // none where provided
+        msgJson = {
+          "username": name,//document.getElementById('name').value, // bot name
+          "icon_url": iconurl,//document.getElementById('avatar').value, // bot image
+          "text": document.getElementById('content').value // text to send if provided
+        }
+      }
+
+      post(hookurl, msgJson); // post the message
+    }
+  }
+
+  function post(url, jsonmsg){
+    xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true); //request to the hookurl
+    xhr.setRequestHeader("Content-type", "application/json"); //type
+    var data = JSON.stringify(jsonmsg); // make the json actual json
+    xhr.send(data); // send to the server
+    xhr.onreadystatechange = function() {
+      if(this.status != 200){
+        alert(this.responseText);
+      }
+      else{
+        document.getElementById("d").click();
+      }
+    }
+  }
+
+  $("#submit").submit(function(){
+    var post_data = $("#submit").serialize();
+    $.post("send.php", post_data, function(data){
+      alert("Message sent!");
+    })
+  });
+</script>
